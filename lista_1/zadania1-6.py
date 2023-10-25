@@ -14,7 +14,8 @@ def insertion_sort(A: np.ndarray) -> np.ndarray:
         A[i+1] = key
     return A
 
-print(insertion_sort([5.1, 2.2, 4.3, 6.4, 1.5, 3.6]))
+test = insertion_sort([5.1, 2.2, 4.3, 6.4, 1.5, 3.6])
+print(f"Insertion-sort: {test}")
 
 
 
@@ -38,7 +39,8 @@ def insertion_sort_plus(A: np.ndarray) -> np.ndarray:
         liczba_przypisan += 1
     return A, liczba_porownan, liczba_przypisan
 
-print(insertion_sort_plus([5, 2, 4]))
+test = insertion_sort_plus([5, 2, 4])
+print(f"Insertion-sort-plus: {test}")
 
 #zadanie 3
 def bubble_sort(A: np.ndarray) -> np.ndarray:
@@ -48,7 +50,8 @@ def bubble_sort(A: np.ndarray) -> np.ndarray:
                 A[j], A[j+1] = A[j+1], A[j]
     return A
 
-print(bubble_sort([5, 2, 4, 6, 1, 33]))
+test = bubble_sort([5, 2, 4, 6, 1, 33])
+print(f"Bubble-sort: {test}")
 
 
 def bubble_sort_plus(A: np.ndarray) -> np.ndarray:
@@ -62,7 +65,8 @@ def bubble_sort_plus(A: np.ndarray) -> np.ndarray:
                 liczba_przypisan += 2
     return A, liczba_porownan, liczba_przypisan
 
-print(bubble_sort_plus([5, 2, 4]))
+test = bubble_sort_plus([5, 2, 4, 6, 1, 33])
+print(f"Bubble-sort-plus: {test}")
 
 
 #zadanie 4
@@ -89,7 +93,8 @@ def merge_sort(A: np.ndarray, p, k) -> np.ndarray:
         merge(A, p, s, k)
     return A
 
-print(merge_sort([3, 2, 4, 6, 1, 5], 1, 6))
+test = merge_sort([3, 2, 4, 6, 1, 5], 1, 6)
+print(f"Merge-sort: {test}")
 
 
 def merge_plus(A: np.ndarray, p, s, k ) -> np.ndarray:
@@ -126,26 +131,28 @@ def merge_sort_plus(A: np.ndarray, p, k) -> np.ndarray:
     return A, liczba_porownan, liczba_przypisan
 
 
-print(merge_sort_plus([3, 2, 4, 6], 1, 4))
+test = merge_sort_plus([3, 2, 4, 6, 1, 5], 1, 6)
+print(f"Merge-sort-plus: {test}")
 
 
 #zadanie 5
 def merge_sort21(A: np.ndarray, p, k) -> np.ndarray: 
     if p < k:
-        s = p + (k-p)//3
+        s = p + 2*(k-p)//3
         merge_sort(A, p, s)
         merge_sort(A, s+1, k)
         merge(A, p, s, k)
     return A
 
-print(merge_sort([3, 2, 4, 6, 1, 5], 1, 6))
+test = merge_sort21([3, 2, 4, 6, 1, 5], 1, 6)
+print(f"Merge-sort21: {test}")
 
 
 def merge_sort21_plus(A: np.ndarray, p, k) -> np.ndarray:
     liczba_porownan = 0
     liczba_przypisan = 0
     if p < k:
-        s = p + (k-p)//3
+        s = p + 2*(k-p)//3
         A, liczba_porownan1, liczba_przypisan1 = merge_sort21_plus(A, p, s)
         A, liczba_porownan2, liczba_przypisan2 = merge_sort21_plus(A, s+1, k)
         A, liczba_porownan3, liczba_przypisan3 = merge_plus(A, p, s, k)
@@ -153,13 +160,14 @@ def merge_sort21_plus(A: np.ndarray, p, k) -> np.ndarray:
         liczba_przypisan = liczba_przypisan1 + liczba_przypisan2 + liczba_przypisan3
     return A, liczba_porownan, liczba_przypisan
 
-print(merge_sort21([3, 2, 4, 6], 1, 4))
+test = merge_sort21_plus([3, 2, 4, 6, 1, 5], 1, 6)
+print(f"Merge-sort21-plus: {test}")
 
 #zadanie 6
 def test_alg(algorytmy):
     wyniki = []
     macierz = []
-    rozmiar = random.randint(100, 2000)
+    rozmiar = random.randint(10, 2000)
     for liczba in range(rozmiar):
         macierz.append(random.randint(1, 1000000))
     for algorytm in algorytmy:
@@ -180,3 +188,5 @@ test = test_alg(algorytmy)
 print(test)
 for algorytm, index in zip(algorytmy, range(len(algorytmy))):
     print(algorytm.__name__, test[index])
+
+
