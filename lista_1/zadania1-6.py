@@ -2,6 +2,7 @@ import time
 import random
 import numpy as np
 
+
 #zadanie 1
 def insertion_sort(A: np.ndarray) -> np.ndarray:
     for j in range(1, len(A)):
@@ -16,6 +17,7 @@ def insertion_sort(A: np.ndarray) -> np.ndarray:
 print(insertion_sort([5.1, 2.2, 4.3, 6.4, 1.5, 3.6]))
 
 
+
 #zadanie 2
 def insertion_sort_plus(A: np.ndarray) -> np.ndarray:
     liczba_przypisan = 0
@@ -27,7 +29,6 @@ def insertion_sort_plus(A: np.ndarray) -> np.ndarray:
         while i >= 0:
             liczba_porownan += 1
             if A[i] > key:
-                liczba_porownan += 1
                 A[i+1] = A[i]
                 liczba_przypisan += 1
                 i = i - 1
@@ -42,22 +43,21 @@ print(insertion_sort_plus([5, 2, 4]))
 #zadanie 3
 def bubble_sort(A: np.ndarray) -> np.ndarray:
     for i in range(0,len(A)-1):
-        for j in range(0, len(A)-1):
+        for j in range(0, len(A)-i-1):
             if A[j] > A[j+1]:
                 A[j], A[j+1] = A[j+1], A[j]
     return A
 
-print(bubble_sort([5, 2, 4, 6, 1, 3]))
+print(bubble_sort([5, 2, 4, 6, 1, 33]))
 
 
 def bubble_sort_plus(A: np.ndarray) -> np.ndarray:
     liczba_przypisan = 0
     liczba_porownan = 0
     for i in range(0,len(A)-1):
-        for j in range(0, len(A)-1):
+        for j in range(0, len(A)-i-1):
             liczba_porownan += 1
             if A[j] > A[j+1]:
-                liczba_porownan += 1
                 A[j], A[j+1] = A[j+1], A[j]
                 liczba_przypisan += 2
     return A, liczba_porownan, liczba_przypisan
@@ -159,7 +159,7 @@ print(merge_sort21([3, 2, 4, 6], 1, 4))
 def test_alg(algorytmy):
     wyniki = []
     macierz = []
-    rozmiar = random.randint(100, 200)
+    rozmiar = random.randint(100, 2000)
     for liczba in range(rozmiar):
         macierz.append(random.randint(1, 1000000))
     for algorytm in algorytmy:
