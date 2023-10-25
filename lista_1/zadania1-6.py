@@ -18,7 +18,6 @@ test = insertion_sort([5.1, 2.2, 4.3, 6.4, 1.5, 3.6])
 print(f"Insertion-sort: {test}")
 
 
-
 #zadanie 2
 def insertion_sort_plus(A: np.ndarray) -> np.ndarray:
     liczba_przypisan = 0
