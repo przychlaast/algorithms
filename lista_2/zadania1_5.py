@@ -43,6 +43,7 @@ def heapsort_plus(A):
     przypisania, porownania = 0, 0
     A, przypisania, porownania = build_heap_plus(A, przypisania, porownania)
     rozmiar_kopca = len(A)
+    przypisania += 1
     for i in range(rozmiar_kopca-1, 0, -1):
         A[0], A[i] = A[i], A[0]
         przypisania += 2
@@ -52,6 +53,7 @@ def heapsort_plus(A):
 
 def build_heap_plus(A, przypisania, porownania):
     rozmiar_kopca = len(A)
+    przypisania += 1
     for i in range(rozmiar_kopca//2-1, -1, -1):
         A, przypisania, porownania = heapify_plus(A, i, rozmiar_kopca, przypisania, porownania)
     return A, przypisania, porownania
@@ -60,15 +62,17 @@ def heapify_plus(A, i, rozmiar_kopca, przypisania, porownania):
     l = 2*i + 1
     r = 2*i + 2
     przypisania += 2
+    porownania += 2
     if l < rozmiar_kopca and A[l] > A[i]:
         najwiekszy = l
-        porownania += 2
+        przypisania += 1
     else: 
         najwiekszy = i
-        porownania += 1
+        przypisania += 1
+    porownania += 3
     if r < rozmiar_kopca and A[r] > A[najwiekszy]:
         najwiekszy = r
-        porownania += 2
+        przypisania += 1
     if najwiekszy != i:
         A[i], A[najwiekszy] = A[najwiekszy], A[i]
         przypisania += 2
@@ -90,7 +94,7 @@ def heapsort3(A):
 
 def build_heap3(A):
     rozmiar_kopca = len(A)
-    for i in range((rozmiar_kopca//3)-1, -1, -1):
+    for i in range(rozmiar_kopca//3, -1, -1):
         heapify3(A, i, rozmiar_kopca)
 
 def heapify3(A, i, rozmiar_kopca):
@@ -115,6 +119,7 @@ def heapsort3_plus(A):
     przypisania, porownania = 0, 0
     A, przypisania, porownania = build_heap3_plus(A, przypisania, porownania)
     rozmiar_kopca = len(A)
+    przypisania += 1
     for i in range(rozmiar_kopca-1, 0, -1):
         A[0], A[i] = A[i], A[0]
         przypisania += 2
@@ -124,6 +129,7 @@ def heapsort3_plus(A):
 
 def build_heap3_plus(A, przypisania, porownania):
     rozmiar_kopca = len(A)
+    przypisania += 1
     for i in range(rozmiar_kopca//3, -1, -1):
         A, przypisania, porownania = heapify3_plus(A, i, rozmiar_kopca, przypisania, porownania)
     return A, przypisania, porownania
@@ -132,17 +138,18 @@ def heapify3_plus(A, i, rozmiar_kopca, przypisania, porownania):
     l = 3*i + 1
     m = 3*i + 2
     r = 3*i + 3
-    przypisania += 3
     najwiekszy = i
+    przypisania += 4
+    porownania += 7
     if l < rozmiar_kopca and A[l] > A[najwiekszy]:
         najwiekszy = l
-        porownania += 2
+        przypisania += 1
     if m < rozmiar_kopca and A[m] > A[najwiekszy]:
         najwiekszy = m
-        porownania += 2
+        przypisania += 1
     if r < rozmiar_kopca and A[r] > A[najwiekszy]:
         najwiekszy = r
-        porownania += 2
+        przypisania += 1
     if najwiekszy != i:
         A[i], A[najwiekszy] = A[najwiekszy], A[i]
         przypisania += 2
@@ -174,6 +181,7 @@ print(f'Quicksort: {quicksort(A, 0, len(A)-1)}')
     
 
 def quicksort_plus(A, p, k, przypisania=0, porownania=0):
+    porownania += 1
     if p < k:
         s, przypisania, porownania = partition_plus(A, p, k, przypisania, porownania)
         A, przypisania, porownania = quicksort_plus(A, p, s-1, przypisania, porownania)
@@ -201,60 +209,90 @@ def quicksort3(A, p, k):
     if p < k:
         granica1, granica2 = partition3(A, p, k)
         quicksort3(A, p, granica1 - 1)
+        quicksort3(A, granica1+1, granica2)
         quicksort3(A, granica2 + 1, k)
     return A
 
 def partition3(A, p, k):
-    x = A[k]
-    granica1 = p
-    granica2 = k
-    i = p
-    while i <= granica2:
+    if A[p] > A[k]:
+        A[p], A[k] = A[k], A[p]
+    x = A[p]
+    y = A[k]
+    l = p + 1
+    g = k - 1
+    i = p + 1
+    while i <= g:
         if A[i] < x:
-            A[i], A[granica1] = A[granica1], A[i]
-            i += 1
-            granica1 += 1
-        elif A[i] > x:
-            A[i], A[granica2] = A[granica2], A[i]
-            granica2 -= 1
-        else:
-            i += 1
-    return granica1, granica2
+            A[i], A[l] = A[l], A[i]
+            l += 1
+        elif A[i] > y:
+            while A[g] > y and i < g:
+                g -= 1
+            A[i], A[g] = A[g], A[i]
+            g -= 1
+            if A[i] < x:
+                A[i], A[l] = A[l], A[i]
+                l += 1
+        i += 1
+    l -= 1
+    g += 1
+    A[p], A[l] = A[l], A[p]
+    A[k], A[g] = A[g], A[k]
+    return l, g
 
 print(f'Quicksort3: {quicksort3(A, 0, len(A)-1)}')
 
 
 def quicksort3_plus(A, p, k, przypisania=0, porownania=0):
+    porownania += 1
     if p < k:
         granica1, granica2, przypisania, porownania = partition3_plus(A, p, k, przypisania, porownania)
         A, przypisania, porownania = quicksort3_plus(A, p, granica1 - 1, przypisania, porownania)
+        A, przypisania, porownania = quicksort3_plus(A, granica1 + 1, granica2 - 1, przypisania, porownania)
         A, przypisania, porownania = quicksort3_plus(A, granica2 + 1, k, przypisania, porownania)
     return A, przypisania, porownania
 
 def partition3_plus(A, p, k, przypisania, porownania):
-    x = A[k]
-    granica1 = p
-    granica2 = k
-    i = p
-    przypisania += 4
-    while i <= granica2:
+    porownania += 1
+    if A[p] > A[k]:
+        A[p], A[k] = A[k], A[p]
+        przypisania += 2
+    x = A[p]
+    y = A[k]
+    l = p + 1
+    g = k - 1
+    i = p + 1
+    przypisania += 5
+    while i <= g:
         porownania += 1
         if A[i] < x:
-            A[i], A[granica1] = A[granica1], A[i]
-            i += 1
-            granica1 += 1
-            porownania += 1
+            A[i], A[l] = A[l], A[i]
+            l += 1
             przypisania += 2
-        elif A[i] > x:
-            A[i], A[granica2] = A[granica2], A[i]
-            granica2 -= 1
+        elif A[i] > y:
+            while A[g] > y and i < g:
+                porownania += 2
+                g -= 1
             porownania += 1
+            A[i], A[g] = A[g], A[i]
+            g -= 1
             przypisania += 2
-        else:
-            i += 1
-    return granica1, granica2, przypisania, porownania
+            porownania += 1
+            if A[i] < x:
+                A[i], A[l] = A[l], A[i]
+                l += 1
+                przypisania += 2
+        i += 1
+    porownania += 1
+    l -= 1
+    g += 1
+    A[p], A[l] = A[l], A[p]
+    A[k], A[g] = A[g], A[k]
+    przypisania += 4
+    return l, g, przypisania, porownania
 
 print(f'Quicksort3 plus: {quicksort3_plus(A, 0, len(A)-1)}')
+
 
 #zadanie 5
 def test_algorytmu(algorytm, nazwa_algorytmu):
