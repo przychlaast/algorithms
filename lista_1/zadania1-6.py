@@ -188,4 +188,3 @@ print(test)
 for algorytm, index in zip(algorytmy, range(len(algorytmy))):
     print(algorytm.__name__, test[index])
 
-
