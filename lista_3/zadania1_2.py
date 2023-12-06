@@ -19,9 +19,9 @@ def countingsort(A, wykladnik, podstawa):
         A[i] = B[i]
 
 def radixsort(A, podstawa):
-    max1 = max(A)
+    max_wart = max(A)
     wykladnik = 1
-    while max1 // wykladnik > 0:
+    while max_wart // wykladnik > 0:
         countingsort(A, wykladnik, podstawa)
         wykladnik *= podstawa
     return A
