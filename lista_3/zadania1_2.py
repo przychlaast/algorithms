@@ -3,16 +3,16 @@ import random
 from math import floor
 
 #zadanie1
-def countingsort(A, wykladnik, podstawa):
+def countingsort(A, miejsce, podstawa):
     B = [0] * len(A)
     C = [0] * podstawa
     for i in range(len(A)):
-        index = (A[i] // wykladnik)
+        index = (A[i] // miejsce)
         C[index % podstawa] += 1
     for i in range(1, podstawa):
         C[i] += C[i-1]
     for i in range(len(A)-1, -1, -1):
-        index = (A[i] // wykladnik)
+        index = (A[i] // miejsce)
         B[C[index % podstawa] - 1] = A[i]
         C[index % podstawa] -= 1
     for i in range(len(A)):
@@ -20,13 +20,13 @@ def countingsort(A, wykladnik, podstawa):
 
 def radixsort(A, podstawa):
     max_wart = max(A)
-    wykladnik = 1
-    while max_wart // wykladnik > 0:
-        countingsort(A, wykladnik, podstawa)
-        wykladnik *= podstawa
+    miejsce = 1
+    while max_wart // miejsce > 0:
+        countingsort(A, miejsce, podstawa)
+        miejsce *= podstawa
     return A
 
-print(f'Radixsort: {radixsort([123, 456, 789, 321, 654, 987, 345, 678], 16)}')
+print(f'Radixsort: {radixsort([123, 456, 789, 321, 654, 987, 345, 678], 10)}')
 
 
 def porownaj_czasy_radix(n, podstawy):
@@ -82,4 +82,3 @@ for algorytm in algorytmy:
     koniec = time.time()
     czas = koniec - start
     print(f"test {algorytm.__name__} - czas: {czas}")
-
