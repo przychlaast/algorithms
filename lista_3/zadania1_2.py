@@ -20,10 +20,10 @@ def countingsort(A, wykladnik, podstawa):
 
 def radixsort(A, podstawa):
     max1 = max(A)
-    exp = 1
-    while max1 // exp > 0:
-        countingsort(A, exp, podstawa)
-        exp *= podstawa
+    wykladnik = 1
+    while max1 // wykladnik > 0:
+        countingsort(A, wykladnik, podstawa)
+        wykladnik *= podstawa
     return A
 
 print(f'Radixsort: {radixsort([123, 456, 789, 321, 654, 987, 345, 678], 16)}')
