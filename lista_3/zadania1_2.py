@@ -2,7 +2,7 @@ import time
 import random
 from math import floor
 
-#zadanie2
+#zadanie1
 def countingsort(A, wykladnik, podstawa):
     B = [0] * len(A)
     C = [0] * podstawa
