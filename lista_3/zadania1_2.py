@@ -26,7 +26,7 @@ def radixsort(A, podstawa):
         miejsce *= podstawa
     return A
 
-print(f'Radixsort: {radixsort([123, 456, 789, 321, 654, 987, 345, 678], 10)}')
+print(f'Radixsort: {radixsort([123, 456, 789, 321, 654, 987, 345, 678], 128)}')
 
 
 def porownaj_czasy_radix(n, podstawy):
