@@ -36,7 +36,9 @@ def memorized_cut_rod(price, n):
         else:
             q = -inf
             for i in range(1, n + 1):
-                    q = max(q, price[i - 1] + cut_rod_aux(price, n - i))
+                tym_q = price[i - 1] + cut_rod_aux(price, n - i)
+                if tym_q > q:
+                    q = tym_q
                     s[n] = i
         r[n] = q
         return q
@@ -50,13 +52,22 @@ def memorized_cut_rod(price, n):
     optymalne_rozw = extended_cut_rod_solution(price, n)
     return max_zysk, optymalne_rozw
 
+def print_cut_rod_solution(price, n):
+    max_zysk, optymalne_rozw = memorized_cut_rod(price, n)
+    for i in optymalne_rozw:
+        print(i)
+
+print(f"Zadanie 2 - Algorytm z pamięcią maksymalny zysk: {memorized_cut_rod(cennik_test, 4)}")
+print(f"Zadanie 2 - Optymalne rozwiązanie: ")
+print_cut_rod_solution(cennik_test, 4)
+
 poczatek_memorized = time.time()
-max_zysk, optymalne_rozw = memorized_cut_rod(cennik, 10)
+max_zysk, optymalne_rozw = memorized_cut_rod(cennik, 50)
 koniec_memorized = time.time()
 czas_memorized = koniec_memorized - poczatek_memorized
 
 print(f"Zadanie 2 - Algorytm z pamięcią maksymalny zysk: {max_zysk}")
-print(f"Zadanie 2 - Optymalne rozwiązanie: {optymalne_rozw}")
+
 
 #zadanie 3
 def cut_rod(p,n):
@@ -81,11 +92,13 @@ def ext_cut_rod(p, n):
         r[j] = q
     return r, s
 
+
 def print_cut_rod_solution(p, n):
     r, s = ext_cut_rod(p, n)
     while n > 0:
         print(s[n])
         n = n - s[n]
+
 
 print(f"Zadanie 3 - Algorytm iteracyjny maksymalny zysk: {cut_rod(cennik, 10)}")
 print(f"Zadanie 3 - Optymalne rozwiązanie: ")
