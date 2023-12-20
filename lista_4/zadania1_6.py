@@ -7,8 +7,8 @@ def naive_cut_rod(cena, n):
     if n == 0:
         return 0
     q = -inf
-    for i in range(1,n+1):
-        q = max(q, cena[i-1] + naive_cut_rod(cena, n - i))
+    for i in range(1, n + 1):
+        q = max(q, cena[i - 1] + naive_cut_rod(cena, n - i))
     return q
 
 def generator_pret_cena(n, max_cena):
