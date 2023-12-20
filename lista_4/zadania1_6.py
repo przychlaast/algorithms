@@ -17,10 +17,10 @@ def generator_pret_cena(n, max_cena):
 
 cennik = generator_pret_cena(50, 100)
 print(f'Tablica cen: {cennik}')
-print(f"Zadanie 1 - Naiwny algorytm(rekurencyjny) maksymalny zysk: {naive_cut_rod(cennik, 10)}")
+print(f"Zadanie 1 - Naiwny algorytm(rekurencyjny) maksymalny zysk: {naive_cut_rod(cennik, 10)} dla losowego cennika")
 
 cennik_test = [1, 5, 8, 9, 10, 17, 17, 20, 24, 30]
-print(naive_cut_rod(cennik_test, 4))
+print(f"Zadanie 1 - Naiwny algorytm(rekurencyjny) maksymalny zysk: {naive_cut_rod(cennik_test, 4)} dla cennika {cennik_test}")
 
 
 #zadanie 2
