@@ -158,39 +158,40 @@ def memorized_lcs(X, Y):
 print(f"Zadanie 5 - Długość najdłuższego podciągu: {memorized_lcs('abcbdab', 'bdcaba')} dla X = {'abcbdab'} i Y = {'bdcaba'}")
 print(f"Zadanie 5 - Długość najdłuższego podciągu: {memorized_lcs(X_test, Y_test)} dla X = {X_test} i Y = {Y_test}")
 
+
 #zadanie 6
 def lcs_iteracyjnie(X, Y):
     m = len(X)
     n = len(Y)
     L = [[0] * (n + 1) for _ in range(m + 1)]
+    kierunek = [[None] * (n + 1) for _ in range(m + 1)] 
 
-    for i in range(m + 1):
-        for j in range(n + 1):
-            if i == 0 or j == 0:
-                L[i][j] = 0
-            elif X[i-1] == Y[j-1]:
+    for i in range(1, m + 1):
+        for j in range(1, n + 1):
+            if X[i-1] == Y[j-1]:
                 L[i][j] = L[i-1][j-1] + 1
+                kierunek[i][j] = 0
+            elif L[i-1][j] >= L[i][j-1]:
+                L[i][j] = L[i-1][j]
+                kierunek[i][j] = 1
             else:
-                L[i][j] = max(L[i-1][j], L[i][j-1])
+                L[i][j] = L[i][j-1]
+                kierunek[i][j] = 2
 
-    index = L[m][n]
-    lcs_rozw = [''] * (index+1)
-    lcs_rozw[index] = ''
-
+    lcs = []
     i = m
     j = n
     while i > 0 and j > 0:
-        if X[i-1] == Y[j-1]:
-            lcs_rozw[index-1] = X[i-1]
+        if kierunek[i][j] == 0:
+            lcs.append(str(X[i-1]))
             i -= 1
             j -= 1
-            index -= 1
-        elif L[i-1][j] > L[i][j-1]:
+        elif kierunek[i][j] == 1:
             i -= 1
         else:
             j -= 1
 
-    return L[m][n], ''.join(map(str, lcs_rozw))
+    return ''.join(reversed(lcs))
 
 
 print(f"Zadanie 6 - Optymalne rozwiązanie: {lcs_iteracyjnie(X_test, Y_test)} dla X = {X_test} i Y = {Y_test}")
