@@ -21,20 +21,26 @@ f = [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
 s_test, f_test = generator_zajec(100)
 
 #zadanie 2
-def activity_selector_dp(s, f):
+def activity_selector_pd(s, f):
     n = len(f)
-    dp = [0]*(n+1)
+    pd = [0]*(n+1)
+    zajecia = [[] for _ in range(n+1)]
 
-    f = [0] + f
     s = [0] + s
-
+    f = [0] + f
+    
     for i in range(1, n+1):
-        dp[i] = max(dp[j] + 1 for j in range(i) if s[i] >= f[j])
-    return dp[n]
+        pd[i] = max(pd[j] + 1 for j in range(i) if s[i] >= f[j])
+        if pd[i] == pd[i-1]:
+            zajecia[i] = zajecia[i-1]
+        else:
+            j = max(range(i), key = pd.__getitem__)
+            zajecia[i] = zajecia[j] + [i]
+    return zajecia[n]
 
 
-print(f'Zadanie 2 - Liczba przydzielonych zajęć algorytm dynamiczny: {activity_selector_dp(s, f)}') 
-print(f'Zadanie 2 - Liczba przydzielonych zajęć dla losowych 50 zajęć algorytm dynamiczny: {activity_selector_dp(s_test, f_test)}')
+print(f'Zadanie 2 - Liczba przydzielonych zajęć algorytm dynamiczny: {activity_selector_pd(s, f)}') 
+print(f'Zadanie 2 - Liczba przydzielonych zajęć dla losowych 50 zajęć algorytm dynamiczny: {activity_selector_pd(s_test, f_test)}')
 
 #zadanie 3
 def recursive_activity_selector(s, f, k, n):
@@ -42,17 +48,17 @@ def recursive_activity_selector(s, f, k, n):
     while m <= n and s[m] < f[k]:
         m += 1
     if m <= n:
-        return [k] + recursive_activity_selector(s, f, m, n)
+        return [k+1] + recursive_activity_selector(s, f, m, n)
     else:
-        return [k]
-
+        return [k+1]
+    
 def activity_selector(s, f):
     n = len(s)
-    A = [0]
+    A = [1]
     j = 0
     for i in range(1, n):
         if s[i] >= f[j]:
-            A.append(i)
+            A.append(i+1)
             j = i
     return A
 
@@ -64,7 +70,7 @@ print(f'Zadanie 3 - Algorytm iteracyjny: {activity_selector(s, f)}')
 print(f'Zadanie 3 - Algorytm rekurencyjny dla losowych 50 zajęć: {recursive_activity_selector(s_test, f_test, 0, len(s_test)-1)}')
 print(f'Zadanie 3 - Algorytm iteracyjny dla losowych 50 zajęć: {activity_selector(s_test, f_test)}')
 
-algorytmy = [activity_selector_dp, recursive_activity_selector, activity_selector]
+algorytmy = [activity_selector_pd, recursive_activity_selector, activity_selector]
 
 print('Zadanie 3 - ')
 for algorytm in algorytmy:
@@ -120,3 +126,6 @@ while True:
         print("greedy_coin_changing:", len(coin_changing(nominaly_test, sum)), coin_changing(nominaly_test, sum))
         print("Nominały dla których algorytm zachłanny nie znajduje optymalnego rozwiązania:", nominaly_test)
         break
+
+
+

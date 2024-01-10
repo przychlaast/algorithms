@@ -1,0 +1,422 @@
+\documentclass{article}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern, microtype}
+\usepackage[T1]{fontenc}
+\usepackage{url}
+\usepackage[letterpaper,top=2cm,bottom=2cm,left=3cm,right=3cm,marginparwidth=1.75cm]{geometry}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{pgfplots}
+\usepackage{float}
+\usepackage{multirow}
+
+
+
+\title{Algorytmy sortujące}
+\author{Stanisław Olek}
+\date{}
+
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Wstęp}
+W tym artykule omówimy różne algorytmy sortujące, w tym insertion-sort, bubble-sort, merge-sort, heap-sort, quicksort, radixsort, countingsort i bucketsort.
+
+\section{Insertion Sort}
+Insertion Sort to prosty algorytm sortujący, który działa poprzez podział tablicy na część posortowaną i nieposortowaną. Następnie wybiera elementy z nieposortowanej części i umieszcza je na odpowiedniej pozycji w posortowanej części. roces ten jest kontynuowany, dopóki cała tablica nie zostanie posortowana.
+
+\subsection{Kod}
+\begin{lstlisting}[language=Python]
+def insertion_sort(A):
+    for j in range(1, len(A)):
+        key = A[j]
+        i = j - 1
+        while i >= 0 and A[i] > key:
+            A[i+1] = A[i]
+            i = i - 1
+        A[i+1] = key
+    return A
+    \end{lstlisting}
+
+\section{Bubble Sort}
+Bubble Sort to algorytm sortujący, który działa poprzez wielokrotne przechodzenie przez tablicę i zamianę miejscami sąsiednie elementy, jeśli są one w złej kolejności.
+
+\subsection{Kod}
+\begin{lstlisting}[language=Python]
+def bubble_sort(A: np.ndarray) -> np.ndarray:
+    for i in range(0,len(A)-1):
+        for j in range(0, len(A)-i-1):
+            if A[j] > A[j+1]:
+                A[j], A[j+1] = A[j+1], A[j]
+    return A
+\end{lstlisting}
+
+\section{Merge Sort}
+Merge Sort to algorytm sortujący, który działa na zasadzie "dziel i zwyciężaj", dzieląc tablicę na dwie połowy, a następnie sortując każdą z nich, a na końcu łącząc je w jedną posortowaną tablicę.
+
+\subsection{Kod}
+\begin{lstlisting}[language=Python]
+def merge(A, p, s, k):
+    L = A[p-1:s]
+    R = A[s:k]
+    L.append(np.inf)
+    R.append(np.inf)
+    i = 0
+    j = 0
+    for l in range(p-1, k):
+        if L[i] <= R[j]:
+            A[l] = L[i]
+            i = i + 1
+        else:
+            A[l] = R[j]
+            j = j + 1
+
+def merge_sort(A, p, k):
+    if p < k:
+        s = (p+k)//2
+        merge_sort(A, p, s)
+        merge_sort(A, s+1, k)
+        merge(A, p, s, k)
+    return A
+\end{lstlisting}
+
+\section{Wyniki testów}
+\subsection{Tabela}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    Algorytm & Rozmiar danych & Czas wykonania & Liczba porównań & Liczba przypisań \\
+    \hline
+    Insertion Sort & 1000 & 0.055s & 254831 & 255835 \\
+    Bubble Sort & 1000 & 0.1s & 499500 & 507674 \\
+    Merge Sort & 1000 & 0.003s & 9976 & 9976 \\
+    \hline
+    \end{tabular}
+    \caption{Porównanie algorytmów sortujących: Insertion Sort, Bubble Sort i Merge Sort. Testy przeprowadzono dla losowych tablic o podanym rozmiarze.}
+\end{table}
+
+\subsection{Wykres}
+\begin{figure}[H]
+\begin{tikzpicture}
+\begin{axis}[
+    ybar,
+    enlargelimits=0.25,
+    legend style={at={(1.05,0.5)},anchor=west}, 
+    ylabel={Wartość},
+    symbolic x coords={Insertion Sort, Bubble Sort, Merge Sort},
+    xtick=data,
+    ymin=0.001,
+    ymax=1000000,
+    ymode=log, 
+    log origin=infty,
+    bar width=12pt, 
+    x tick label style={rotate=45,anchor=east},
+    grid=major, 
+    grid style={dashed,gray!30},
+]
+\addplot coordinates {(Insertion Sort,0.055) (Bubble Sort,0.1) (Merge Sort,0.003)};
+\addplot coordinates {(Insertion Sort,254831) (Bubble Sort,499500) (Merge Sort,9976)};
+\addplot coordinates {(Insertion Sort,255835) (Bubble Sort,507674) (Merge Sort,9976)};
+\legend{Czas wykonania [s], Liczba porównań, Liczba przypisań}
+\end{axis}
+\end{tikzpicture}
+\caption{Porównanie algorytmów sortujących: Insertion Sort, Bubble Sort i Merge Sort. Testy przeprowadzono dla losowych tablic rozmiaru 1000.}
+\end{figure}
+
+
+
+\section{Heap Sort}
+Heap Sort to algorytm sortujący, który działa na zasadzie porównań, opierając się na strukturze danych zwaną kopcem binarnym. Najpierw przekształca tablicę w kopiec, a następnie usuwa kolejno korzeń kopca i zastępuje go ostatnim węzłem, po czym przywraca własność kopca. Proces ten jest powtarzany, dopóki kopiec nie zostanie zredukowany do jednego elementu.
+
+
+\subsection{Kod}
+\begin{lstlisting}[language=Python]
+    def heapsort(A):
+    build_heap(A)
+    rozmiar_kopca = len(A)
+    for i in range(rozmiar_kopca-1, 0, -1):
+        A[0], A[i] = A[i], A[0]
+        rozmiar_kopca = rozmiar_kopca - 1
+        heapify(A, 0, rozmiar_kopca)
+    return A
+
+def build_heap(A):
+    rozmiar_kopca = len(A)
+    for i in range(rozmiar_kopca//2-1, -1, -1):
+        heapify(A, i, rozmiar_kopca)
+    return A
+
+def heapify(A, i, rozmiar_kopca):
+    l = 2*i + 1
+    r = 2*i + 2
+    if l < rozmiar_kopca and A[l] > A[i]:
+        najwiekszy = l
+    else: 
+        najwiekszy = i
+    if r < rozmiar_kopca and A[r] > A[najwiekszy]:
+        najwiekszy = r
+    if najwiekszy != i:
+        A[i], A[najwiekszy] = A[najwiekszy], A[i]
+        heapify(A, najwiekszy, rozmiar_kopca)
+    return A
+\end{lstlisting}
+
+
+\section{Quick Sort}
+Quick Sort to algorytm sortujący działający na zasadzie "dziel i zwyciężaj", wybierając element jako pivot i partycjonując tablicę wokół wybranego pivotu. Pivot jest umieszczany na odpowiedniej pozycji w posortowanej tablicy, a wszystkie mniejsze elementy są umieszczane po lewej stronie pivotu, a większe po prawej. Proces ten jest powtarzany rekurencyjnie dla każdej z podtablic utworzonych przez partycjonowanie.
+
+\subsection{Kod}
+\begin{lstlisting}[language=Python]
+    def quicksort(A, p, k):
+    if p < k:
+        s = partition(A, p, k)
+        quicksort(A, p, s-1)
+        quicksort(A, s+1, k)
+    return A
+
+def partition(A, p, k):
+    x = A[k]
+    granica = p - 1
+    for j in range(p, k):
+        if A[j] <= x:
+            granica += 1
+            A[j], A[granica] = A[granica], A[j]
+    A[granica+1], A[k] = A[k], A[granica+1]
+    return granica + 1
+\end{lstlisting}
+
+\section{Wyniki testów}
+\subsection{Tabela}
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|c|c|c|}
+    \hline
+    Algorytm & Rozmiar danych & Czas wykonania & Liczba porównań & Liczba przypisań \\
+    \hline
+    \multirow{4}{*}{heapsort\_plus} & 100 & 0.0003s & 3205 & 3330 \\
+    \cline{2-5}
+    & 500 & 0.002s & 21285 & 22499 \\
+    \cline{2-5}
+    & 1000 & 0.005s & 48030 & 50958 \\
+    \cline{2-5}
+    & 5000 & 0.03s & 297805 & 317882 \\
+    \hline
+    \multirow{4}{*}{quicksort\_plus} & 100 & 0.0001s & 743 & 904 \\
+    \cline{2-5}
+    & 500 & 0.001s & 5447 & 6244 \\
+    \cline{2-5}
+    & 1000 & 0.002s & 12104 & 13146 \\
+    \cline{2-5}
+    & 5000 & 0.01s & 75880 & 81782 \\
+    \hline
+    \end{tabular}
+    \caption{ Porównanie algorytmów sortujących: Heap Sort i Quick Sort. Testy przeprowadzono dla losowych tablic o podanych rozmiarach.}
+\end{table}
+
+\subsection{Wykresy}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    \begin{semilogyaxis}[
+        ybar,
+        bar width=.2cm,
+        enlargelimits=0.15,
+        legend style={
+            at={(0.5,-0.15)},
+            anchor=north,
+            legend columns=-1,
+            /tikz/every even column/.append style={column sep=0.5cm}
+        },
+        ylabel={Wartość},
+        symbolic x coords={100,500,1000,5000},
+        xtick=data,
+        log origin=infty,
+        nodes near coords align={vertical},
+        ymin=1e-5, ymax=1e7,
+        grid=major, 
+        grid style={dashed,gray!30},
+    ]
+    \addplot coordinates {(100,0.0003) (500,0.002) (1000,0.005) (5000,0.03)};
+    \addplot coordinates {(100,3205) (500,21285) (1000,48030) (5000,297805)};
+    \addplot coordinates {(100,3330) (500,22499) (1000,50958) (5000,317882)};
+    \legend{Czas wykonania [s], Liczba porównań, Liczba przypisań}
+    \end{semilogyaxis}
+    \end{tikzpicture}
+    \caption{Porównanie zależności czasu wykonania, liczby porównań i liczby przypisań od wielkości danych dla algorytmu Heap Sort. Testy przeprowadzono dla losowych tablic o podanych rozmiarach.}
+    \end{figure}
+    
+    \begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    \begin{semilogyaxis}[
+        ybar,
+        bar width=.2cm,
+        enlargelimits=0.15,
+        legend style={
+            at={(0.5,-0.15)},
+            anchor=north,
+            legend columns=-1,
+            /tikz/every even column/.append style={column sep=0.5cm}
+        },
+        ylabel={Wartość},
+        symbolic x coords={100,500,1000,5000},
+        xtick=data,
+        log origin=infty,
+        nodes near coords align={vertical},
+        ymin=1e-5, ymax=1e7,
+        grid=major, 
+        grid style={dashed,gray!30},
+    ]
+    \addplot coordinates {(100,0.0001) (500,0.001) (1000,0.002) (5000,0.01)};
+    \addplot coordinates {(100,743) (500,5447) (1000,12104) (5000,75880)};
+    \addplot coordinates {(100,904) (500,6244) (1000,13146) (5000,81782)};
+    \legend{Czas wykonania [s], Liczba porównań, Liczba przypisań}
+    \end{semilogyaxis}
+    \end{tikzpicture}
+    \caption{Porównanie zależności czasu wykonania, liczby porównań i liczby przypisań od wielkości danych dla algorytmu Quick Sort. Testy przeprowadzono dla losowych tablic o podanych rozmiarach.}
+\end{figure}
+
+\section{Counting Sort}
+Counting Sort jest algorytmem sortującym, który sortuje elementy na podstawie liczby wystąpień każdego klucza w tablicy wejściowej.
+
+\subsection{Kod}
+
+\begin{lstlisting}[language=Python]
+    def countingsort(A, miejsce, podstawa):
+        B = [0] * len(A)
+        C = [0] * podstawa
+        for i in range(len(A)):
+            index = (A[i] // miejsce)
+            C[index % podstawa] += 1
+        for i in range(1, podstawa):
+            C[i] += C[i-1]
+        for i in range(len(A)-1, -1, -1):
+            index = (A[i] // miejsce)
+            B[C[index % podstawa] - 1] = A[i]
+            C[index % podstawa] -= 1
+        for i in range(len(A)):
+            A[i] = B[i]
+\end{lstlisting}
+
+\section{Radix Sort}
+Radix Sort jest algorytmem sortującym, który działa poprzez sortowanie danych na podstawie poszczególnych cyfr kluczy. Radix Sort działa od najmniej znaczącej cyfry do najbardziej znaczącej cyfry. Każda operacja sortowania na cyfrze jest wykonywana za pomocą stabilnego algorytmu sortującego, takiego jak Counting Sort.\indent
+
+\subsection{Kod}
+\begin{lstlisting}[language=Python]
+    def radixsort(A, podstawa):
+        max_wart = max(A)
+        miejsce = 1
+        while max_wart // miejsce > 0:
+            countingsort(A, miejsce, podstawa)
+            miejsce *= podstawa
+        return A
+\end{lstlisting}
+
+\section{Bucket Sort}
+Algorytm Bucket Sort jest algorytmem sortującym, który dzieli dane na "kubełki", następnie sortuje każdy kubełek osobno za pomocą stabilnego algorytmu sortującego takiego jak Insertion Sort, na końcu zaś łączy je, aby uzyskać posortowaną listę.
+
+\subsection{Kod}
+\begin{lstlisting}[language=Python]
+    def bucketsort(A):
+        n = len(A)
+        B = [[] for _ in range(n)]
+        for i in range(n):
+            index = int(A[i] * n)
+            B[index].append(A[i])
+        for i in range(n):
+            B[i] = insertion_sort(B[i])
+        k = 0
+        for i in range(n):
+            for j in range(len(B[i])):
+                A[k] = B[i][j]
+                k += 1
+        return A
+\end{lstlisting}
+
+\section{Wyniki testów}
+\subsection{Tabele}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{|c|c|c|c|}
+    \hline
+    Podstawa & Czas wykonania\\
+    \hline
+    2 & 0.49s \\
+    3 & 0.32s \\
+    10 & 0.19s \\
+    16 & 0.15s \\
+    32 & 0.11s \\
+    \hline
+    \end{tabular}
+    \caption{Porównanie czasów wykonania algorytmu Radix Sort dla różnych podstaw. Testy przeprowadzono dla losowych tablic rozmiaru 100 000.}
+\end{table}
+
+\begin{table}[H]
+    \centering
+    \begin{tabular}{|c|c|}
+    \hline
+    Algorytm & Czas wykonania\\
+    \hline
+    Bucket Sort & 0.01s \\
+    Radix Sort & 0.0002s \\
+    Insertion Sort & 3.48s \\
+    \hline
+    \end{tabular}
+    \caption{Porównanie czasów wykonania algorytmów sortujących: Bucket Sort, Radix Sort i Insertion Sort. Testy przeprowadzono dla losowych tablic o wartościach z przedziału {$[0,1)$} rozmiaru 10 000.}
+\end{table}
+
+
+\subsection{Wykresy}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        xtick=data,
+        xlabel=Podstawa,
+        ylabel={Czas\ wykonania\ [s]},
+        symbolic x coords={2,3,10,16,32},
+        ybar,
+        grid=major, 
+        grid style={dashed,gray!30},
+    ]
+    \addplot coordinates {
+        (2,0.49)
+        (3,0.32)
+        (10,0.19)
+        (16,0.15)
+        (32,0.11)
+    };
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Porównanie czasów wykonania algorytmu Radix Sort dla różnych podstaw. Testy przeprowadzono dla losowych tablic rozmiaru 100 000.}
+\end{figure}
+
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+    \begin{axis}[
+        ybar,
+        symbolic x coords={Bucket Sort, Radix Sort, Insertion Sort},
+        xtick=data,
+        xlabel=Algorytm,
+        ylabel={Czas\ wykonania\ [s]},
+        nodes near coords,
+        nodes near coords align={vertical},
+        grid=major, 
+        grid style={dashed,gray!30},
+        ]
+        \addplot coordinates {
+            (Bucket Sort, 0.01)
+            (Radix Sort, 0.0002)
+            (Insertion Sort, 3.48)
+        };
+    \end{axis}
+    \end{tikzpicture}
+    \caption{Porównanie czasów wykonania algorytmów sortujących: Bucket Sort, Radix Sort i Insertion Sort. Testy przeprowadzono dla losowych tablic o wartościach z przedziału {$[0,1)$} rozmiaru 10 000.}
+\end{figure}
+
+\end{document}

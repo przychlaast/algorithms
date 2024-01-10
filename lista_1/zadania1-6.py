@@ -166,7 +166,7 @@ print(f"Merge-sort21-plus: {test}")
 def test_alg(algorytmy):
     wyniki = []
     macierz = []
-    rozmiar = random.randint(10, 2000)
+    rozmiar = 1000
     for liczba in range(rozmiar):
         macierz.append(random.randint(1, 1000000))
     for algorytm in algorytmy:

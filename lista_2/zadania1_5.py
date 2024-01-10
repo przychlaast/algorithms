@@ -333,6 +333,7 @@ def test_algorytmu(algorytm, nazwa_algorytmu):
 
     plt.tight_layout()
     plt.savefig(f'{nazwa_algorytmu}.pdf')
+    return rozmiary, czasy, lista_porownan, lista_przypisan
 
 
 algorytmy = [heapsort_plus, heapsort3_plus, quicksort_plus, quicksort3_plus]
