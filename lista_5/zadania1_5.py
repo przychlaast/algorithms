@@ -100,7 +100,7 @@ def dynamic_coin_changing(nominaly, sum):
     return pd[n][sum]
 
 nominaly = [1, 5, 8, 10, 20, 50]
-print(f'Zadanie 4 - Minimalna liczba monet za pomocą których możemy wydać wejściową sumę: {dynamic_coin_changing(nominaly, 100)}')
+print(f'Zadanie 4 - Minimalna liczba nominałów za pomocą których możemy wydać wejściową sumę - 100 zł: {dynamic_coin_changing(nominaly, 100)}')
 
 
 #zadanie 5
