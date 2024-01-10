@@ -39,8 +39,8 @@ def activity_selector_pd(s, f):
     return zajecia[n]
 
 
-print(f'Zadanie 2 - Liczba przydzielonych zajęć algorytm dynamiczny: {activity_selector_pd(s, f)}') 
-print(f'Zadanie 2 - Liczba przydzielonych zajęć dla losowych 50 zajęć algorytm dynamiczny: {activity_selector_pd(s_test, f_test)}')
+print(f'Zadanie 2 - Algorytm dynamiczny: {activity_selector_pd(s, f)}') 
+print(f'Zadanie 2 - Algorytm dynamiczny dla losowych 50 zajęć: {activity_selector_pd(s_test, f_test)}')
 
 #zadanie 3
 def recursive_activity_selector(s, f, k, n):
@@ -88,16 +88,16 @@ for algorytm in algorytmy:
 def dynamic_coin_changing(nominaly, sum):
 
     n = len(nominaly)
-    dp = [[0]*(sum+1) for _ in range(n+1)]
-    dp[0] = list(range(sum+1))
+    pd = [[0]*(sum+1) for _ in range(n+1)]
+    pd[0] = list(range(sum+1))
 
     for i in range(1, n+1):
         for j in range(0, sum+1):
             if nominaly[i-1] > j:
-                dp[i][j] = dp[i-1][j]
+                pd[i][j] = pd[i-1][j]
             else:
-                dp[i][j] = min(dp[i][j-nominaly[i-1]] + 1, dp[i-1][j])
-    return dp[n][sum]
+                pd[i][j] = min(pd[i][j-nominaly[i-1]] + 1, pd[i-1][j])
+    return pd[n][sum]
 
 nominaly = [1, 5, 8, 10, 20, 50]
 print(f'Zadanie 4 - Minimalna liczba monet za pomocą których możemy wydać wejściową sumę: {dynamic_coin_changing(nominaly, 100)}')
