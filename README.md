@@ -1,1 +1,1 @@
-## Implementacja różnych podstawowych algorytmów
+## Implementacja różnych podstawowych algorytmów sortujących, zachłannych, rekurencyjncyh, DP
