@@ -1,1 +1,1 @@
-# Stanisław Olek 275946
+## Implementacja różnych podstawowych algorytmów
